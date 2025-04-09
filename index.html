@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WaLaの哲学 日めくりカレンダー</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      background: linear-gradient(to bottom, #f0f4f8, #ffffff);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      white-space: pre-line;
+    }
+    .date-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .date {
+      font-size: 1.5rem;
+      font-weight: bold;
+      white-space: pre-line;
+    }
+    .sunday {
+      color: red;
+    }
+    .quote {
+      font-size: 1.25rem;
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin-bottom: 1rem;
+    }
+    .nav-button {
+      font-size: 1.5rem;
+      padding: 0.2rem 0.6rem;
+      border: none;
+      background: none;
+      color: #444;
+      cursor: pointer;
+    }
+    .nav-button:hover {
+      color: #000;
+    }
+    .share-button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border: none;
+      background: #0077cc;
+      color: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .share-button:hover {
+      background: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <h1>WaLaの哲学
+日めくりカレンダー</h1>
+  <div class="date-row">
+    <div>
+      <button class="nav-button" onclick="changeDate(-1)">&#8592;</button>
+      <span class="date" id="date"></span>
+      <button class="nav-button" onclick="changeDate(1)">&#8594;</button>
+    </div>
+  </div>
+  <div class="quote" id="quote"></div>
+  <button class="share-button" onclick="shareQuote()">この名言をシェア</button>
+
+  <script>
+    const quotes = [...Array(34)].map((_, i) => document.createTextNode(``));
+    quotes[0] = "1日の成果は朝のはじめ方で決まる。最高のコンディションで最高の1日を迎えるに十分な体と心の準備をしよう。";
+    quotes[1] = "心身を整えずに仕事に向かうだと？君の仕事はその程度のものか？";
+    quotes[2] = "「おはよう。今日も良い一日を！」良い挨拶は相手だけでなく自分を豊かにする。世界平和も良い挨拶からだ。";
+    quotes[3] = "世界と自分を一体と感じるならあなたの世界はやがて美しくなるだろう。それこそが君の人生を美しくする。";
+    quotes[4] = "今日という日は二度と来ない。計画の進捗は大事だが目の前の人を大切にできない計画に意味はあるだろうか？";
+    quotes[5] = "私たちは自分をこの宇宙から切り離された存在と考えるが、これこそ人類の最大の誤解であり、今日も大いに弊害を生み続けている。";
+    quotes[6] = "自然に触れよう。自然の静けさは心のざわつきを溶かし、心の声を聞こえやすくしてくれる。";
+    quotes[7] = "他人の言葉が気になるのは、自分がまだ自分を信じ切れていないからだ。";
+    quotes[8] = "うまくいく日も、そうでない日も、君の価値が変わることはない。";
+    quotes[9] = "感謝できることを探してみよう。それが心の余裕を生み、今日を豊かにする。";
+    quotes[10] = "失敗は終わりじゃない。成功への過程であり、学びの証。";
+    quotes[11] = "笑顔を忘れずに。君の笑顔は周りの人にも影響を与える。";
+    quotes[12] = "心の整理整頓をしてから1日を始めよう。部屋と同じように、心も整えることができる。";
+    quotes[13] = "君の人生は君だけのもの。他人の期待ではなく、自分の意思で進もう。";
+    quotes[14] = "昨日よりも少しでも前進できたなら、それは立派な成長だ。";
+    quotes[15] = "余白のある1日は心の豊かさを育てる。スケジュールの隙間も大切に。";
+    quotes[16] = "完璧を目指すより、まずは始めること。行動が変化を生む。";
+    quotes[17] = "小さな親切が世界を変える。今日ひとつ、何か良いことをしてみよう。";
+    quotes[18] = "今日という日は贈り物。だから「今」をプレゼント（present）という。";
+    quotes[19] = "呼吸を深くするだけで、心は落ち着きを取り戻す。";
+    quotes[20] = "問題の中にこそ、成長の種がある。それを見逃すな。";
+    quotes[21] = "焦らず、腐らず、驕らず。バランスこそが力だ。";
+    quotes[22] = "思いやりのある言葉を選ぼう。それが世界を少し優しくする。";
+    quotes[23] = "言葉は力。自分にも他人にも、肯定の言葉を使おう。";
+    quotes[24] = "一日を締めくくる前に、今日の良かったことを思い出そう。";
+    quotes[25] = "やるべきことに追われるのではなく、大切なことに向かおう。";
+    quotes[26] = "心を整える時間を毎日に。自分を大切にすることから始めよう。";
+    quotes[27] = "優しさは弱さではない。それは勇気ある選択だ。";
+    quotes[28] = "考えすぎず、まずは一歩踏み出そう。動けば見える景色が変わる。";
+    quotes[29] = "自分を信じる力が、未来を切り拓く鍵となる。";
+    quotes[30] = "未来は君が考えたようにはならないが、君のあり方は、必ず未来に影響する。";
+    quotes[31] = "悔いがないと言えるだけやり切ったか？そうでないならあともう一踏ん張り。やってみよう。";
+    quotes[32] = "愛と謙虚と感謝の気持ちで一日を終えよう。それこそが君自身へ豊かな気分という最高のねぎらいとなろう。";
+    quotes[33] = "「明日が来ると思えること」「今日が今ここにあること」はとても幸せなこと。最高の一日を決意しよう。";
+
+    let currentDate = new Date();
+
+    function updateContent(date) {
+      const day = date.getDate();
+      const index = (day - 1) % quotes.length;
+      const weekday = date.getDay();
+      const formattedDate = date.toLocaleDateString("ja-JP", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long"
+      }).replace(/(\d+日)(\(.+?\))/, '$1\n$2');
+
+      const dateElement = document.getElementById("date");
+      dateElement.textContent = formattedDate;
+      dateElement.className = "date" + (weekday === 0 ? " sunday" : "");
+
+      document.getElementById("quote").textContent = quotes[index];
+    }
+
+    function changeDate(delta) {
+      currentDate.setDate(currentDate.getDate() + delta);
+      updateContent(currentDate);
+    }
+
+    function shareQuote() {
+      const quote = document.getElementById("quote").textContent;
+      if (navigator.share) {
+        navigator.share({
+          title: 'WaLaの哲学 日めくりカレンダー',
+          text: quote,
+          url: location.href
+        });
+      } else {
+        alert("このブラウザでは共有がサポートされていません。");
+      }
+    }
+
+    updateContent(currentDate);
+  </script>
+</body>
+</html>
