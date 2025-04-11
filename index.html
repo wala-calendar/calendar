@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WaLaの哲学 日めくりカレンダー</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      background: linear-gradient(to bottom, #f0f4f8, #ffffff);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      white-space: pre-line;
+    }
+    .date-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .date {
+      font-size: 1.5rem;
+      font-weight: bold;
+      white-space: pre-line;
+    }
+    .sunday {
+      color: red;
+    }
+    .quote {
+      font-size: 1.25rem;
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin-bottom: 1rem;
+    }
+    .nav-button {
+      font-size: 1.5rem;
+      padding: 0.2rem 0.6rem;
+      border: none;
+      background: none;
+      color: #444;
+      cursor: pointer;
+    }
+    .nav-button:hover {
+      color: #000;
+    }
+    .share-button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border: none;
+      background: #0077cc;
+      color: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .share-button:hover {
+      background: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <h1>WaLaの哲学<br>日めくりカレンダー</h1>
+  <div class="date-row">
+    <div>
+      <button class="nav-button" onclick="changeDate(-1)">&#8592;</button>
+      <span class="date" id="date"></span>
+      <button class="nav-button" onclick="changeDate(1)">&#8594;</button>
+    </div>
+  </div>
+  <div class="quote" id="quote"></div>
+  <button class="share-button" onclick="shareQuote()">この名言をシェア</button>
+  <p style="margin-top: 1rem;"><a href="https://wala.jp" target="_blank" style="color: #0077cc; text-decoration: none; font-weight: bold;">wala.jp</a></p>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const quotes = ["君の考える「私たちの範囲」はどこまで含むのか？争う前にもう一度考えよう。", "その他すべての名言..."];
+      let currentDate = new Date();
+      function updateContent(date) {
+        const day = date.getDate();
+        const index = (day - 1) % quotes.length;
+        const weekday = date.getDay();
+        const formattedDate = date.toLocaleDateString("ja-JP", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long"
+        }).replace(/(\d+日)(\(.+?\))/, '$1\n$2');
+        const dateElement = document.getElementById("date");
+        dateElement.textContent = formattedDate;
+        dateElement.className = "date" + (weekday === 0 ? " sunday" : "");
+        document.getElementById("quote").textContent = quotes[index];
+      }
+      window.changeDate = function(delta) {
+        currentDate.setDate(currentDate.getDate() + delta);
+        updateContent(currentDate);
+      }
+      window.shareQuote = function() {
+        const quote = document.getElementById("quote").textContent;
+        if (navigator.share) {
+          navigator.share({
+            title: 'WaLaの哲学 日めくりカレンダー',
+            text: quote,
+            url: location.href
+          });
+        } else {
+          alert("このブラウザでは共有がサポートされていません。");
+        }
+      }
+      updateContent(currentDate);
+    });
+  </script>
+</body>
+</html>
