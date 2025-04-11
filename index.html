@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WaLaの哲学 日めくりカレンダー</title>
+  <!-- CSS omitted for brevity -->
+</head>
+<body>
+  <h1>WaLaの哲学<br>日めくりカレンダー</h1>
+  <div class="date-row">
+    <div>
+      <button class="nav-button" onclick="changeDate(-1)">&#8592;</button>
+      <span class="date" id="date"></span>
+      <button class="nav-button" onclick="changeDate(1)">&#8594;</button>
+    </div>
+  </div>
+  <div class="quote" id="quote"></div>
+  <button class="share-button" onclick="shareQuote()">この名言をシェア</button>
+  <p style="margin-top: 1rem;">
+    <a href="https://wala.jp" target="_blank" style="color: #0077cc; text-decoration: none; font-weight: bold;">
+      wala.jp
+    </a>
+  </p>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const quotes = [
+        "1日の成果は朝のはじめ方で決まる。最高のコンディションで最高の1日を迎えるに十分な体と心の準備をしよう。",
+        "心身を整えずに仕事に向かうだと？君の仕事はその程度のものか？",
+        "「おはよう。今日も良い一日を！」良い挨拶は相手だけでなく自分を豊かにする。世界平和も良い挨拶から始まる。",
+        "世界と自分を一体と感じるならあなたの世界はやがて美しくなるだろう。それこそが君の人生を美しくする。",
+        "今日という日は二度と来ない。計画の進捗も大事だが目の前の人を大切にできない計画に意味はあるのだろうか？",
+        "私たちは自分をこの宇宙から切り離された存在と考えるが、これこそ人類の最大の誤解であり今日も大いに弊害を生み続けている。",
+        "自我で命をコントロールできない。我々の命は宇宙・生命の管轄だ。",
+        "自我意識というのは宇宙・生命の進化の上に現れるものであり、私たちは生きている、のではなく生かされていると言える。",
+        "宇宙・生命は調和を目指し、経済人は独占しようとする。君が目指すのは調和か独占か？独占の先に本当にあるのは安心かさらなる不安か？",
+        "君の願いは、他の人も「これは私の願いでもある」と感じるものだろうか？",
+        "君の考える「私たちの範囲」はどこまで含むのか？争う前にもう一度考えよう。",
+        "自分を知り、相手を知ることなく話し始めることは、不用意なトラブルの原因となる。",
+        "慌てるな。なんとかなる。まずはゆっくり深呼吸せよ。",
+        "誰もが自分の人生を生きている。誰もが目的を持っており、君の手段になりたくはなかろう。",
+        "そろそろ、自分自身が価値を信じていないことを続けるのはやめよう。時間は有限だ。",
+        "時間を味方につけよ。長く続ける価値のあることを始めよう。",
+        "数年やったくらいで諦めるな。真剣に取り組めば7年でそこそこ10年で一人前となる。そして、20年続ける頃には第一人者となるだろう。",
+        "初心忘るるなかれ。漫然と続けるのではなく、始めた頃の意図を見直そう。",
+        "今日、愛に基づいた行動ができたか？",
+        "今日良かったことを３つ考えてみよう。",
+        "働くこと、生活を味わうこと、休むこと。どれも大切だ。自分なりの理想的バランスを考え、今日の過ごし方と照らしてみよう。",
+        "一体いつまで、子供みたいなことを言っているのだ？君はもう大人なのだ。",
+        "全ての原因は君にある。気になっていることに背を向けるなら問題はいつまでも追いかけてくる。",
+        "時が解決することもある。なぜなら君が問題より大きくなるからだ。",
+        "時代は動いている。君はどうだ？",
+        "君の願いが天の願いと一致する時、その願いは天の願いと言える。必ず実現する。",
+        "未来は君が考えたようにはならないが、君のあり方は必ず未来に影響する。",
+        "悔いがないと言えるだけやり切ったか？そうでないならあともう一度。やってみよう。",
+        "愛と謙虚と感謝の気持ちで一日を終えよう。それこそが君自身へ豊かな気分という最高のねぎらいとなろう。",
+        "今ここに意識を向けよう。未来の不安も過去の後悔も手放して、今に在ることが平和だ。",
+        "「明日が来ると思えること」「今日が今ここにあること」はとても幸せなこと。最高の一日を決意しよう。"
+      ];
+      let currentDate = new Date();
+
+      function updateContent(date) {
+        const day = date.getDate();
+        const index = (day - 1) % quotes.length;
+        const weekday = date.getDay();
+        const formattedDate = date.toLocaleDateString("ja-JP", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long"
+        }).replace(/(\d+日)(\(.+?\))/, '$1\n$2');
+        const dateElement = document.getElementById("date");
+        dateElement.textContent = formattedDate;
+        dateElement.className = "date" + (weekday === 0 ? " sunday" : "");
+        document.getElementById("quote").textContent = quotes[index];
+      }
+
+      window.changeDate = function(delta) {
+        currentDate.setDate(currentDate.getDate() + delta);
+        updateContent(currentDate);
+      }
+
+      window.shareQuote = function() {
+        const quote = document.getElementById("quote").textContent;
+        if (navigator.share) {
+          navigator.share({
+            title: 'WaLaの哲学 日めくりカレンダー',
+            text: quote,
+            url: location.href
+          });
+        } else {
+          alert("このブラウザでは共有がサポートされていません。");
+        }
+      }
+
+      updateContent(currentDate);
+    });
+  </script>
+</body>
+</html>
