@@ -1,0 +1,18 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>修正済みカレンダー</title>
+</head>
+<body>
+  <p>このバージョンでは currentDate を定義済み！</p>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const quotes = ["こんにちは！", "これは修正済みのテストです"];
+      let currentDate = new Date();
+      document.body.innerHTML += "<p>" + quotes[currentDate.getDate() % quotes.length] + "</p>";
+    });
+  </script>
+</body>
+</html>
