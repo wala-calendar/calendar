@@ -1,0 +1,20 @@
+{
+  "name": "WaLa日めくりカレンダー",
+  "short_name": "WaLaカレンダー",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#e8f0f4",
+  "theme_color": "#e8f0f4",
+  "icons": [
+    {
+      "src": "https://wala.jp/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://wala.jp/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
