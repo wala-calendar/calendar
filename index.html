@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WaLaの哲学 日めくりカレンダー</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      background-size: cover;
+      background-position: center;
+      text-align: center;
+      padding: 2rem;
+      color: #000;
+      transition: background-image 1s ease-in-out;
+    }
+    h1 {
+      white-space: pre-line;
+      font-size: 2rem;
+    }
+    .date {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+    .quote {
+      background: #ffffffcc;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin: 1rem auto;
+      max-width: 600px;
+      font-size: 1.25rem;
+      white-space: pre-wrap;
+    }
+    .nav-button {
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin: 0 0.5rem;
+    }
+    .share-button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>WaLaの哲学<br>日めくりカレンダー</h1>
+  <div>
+    <button class="nav-button" onclick="changeDate(-1)">←</button>
+    <span class="date" id="date"></span>
+    <button class="nav-button" onclick="changeDate(1)">→</button>
+  </div>
+  <div class="quote" id="quote"></div>
+  <button class="share-button" onclick="shareQuote()">この名言をシェア</button>
+  <p><a href="https://wala.jp" target="_blank">wala.jp</a></p>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const quotes = Array.from({length: 31}, (_, i) => `WaLaの名言`);
+      const backgrounds = Array.from({length: 31}, (_, i) => `images/bg${i + 1}.jpg`);
+      let currentDate = new Date();
+
+      function updateContent(date) {
+        const index = (date.getDate() - 1) % 31;
+        document.getElementById("date").textContent = date.toLocaleDateString("ja-JP", {year: "numeric", month: "long", day: "numeric", weekday: "long"});
+        document.getElementById("quote").textContent = quotes[index];
+        document.body.style.backgroundImage = `url('${backgrounds[index]}')`;
+      }
+
+      window.changeDate = function(delta) {
+        currentDate.setDate(currentDate.getDate() + delta);
+        updateContent(currentDate);
+      }
+
+      window.shareQuote = function () {
+        const quote = document.getElementById("quote").textContent;
+        if (navigator.share) {
+          navigator.share({title: 'WaLaの哲学 日めくりカレンダー', text: quote, url: location.href});
+        } else {
+          alert("このブラウザでは共有がサポートされていません。");
+        }
+      }
+
+      updateContent(currentDate);
+    });
+  </script>
+</body>
+</html>

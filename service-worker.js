@@ -1,21 +1,21 @@
-
-self.addEventListener('install', function(event) {
-  event.waitUntil(
-    caches.open('wala-calendar-v1').then(function(cache) {
+self.addEventListener("install", e => {
+  e.waitUntil(
+    caches.open("wala-calendar").then(cache => {
       return cache.addAll([
-        './',
-        './index.html',
-        './manifest.json',
-        './service-worker.js'
+        "./",
+        "./index.html",
+        "./manifest.json",
+        "./icon-192.png",
+        "./icon-512.png"
       ]);
     })
   );
 });
 
-self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request);
+self.addEventListener("fetch", e => {
+  e.respondWith(
+    caches.match(e.request).then(response => {
+      return response || fetch(e.request);
     })
   );
 });
